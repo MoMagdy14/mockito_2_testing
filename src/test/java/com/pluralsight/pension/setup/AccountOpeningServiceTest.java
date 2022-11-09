@@ -10,6 +10,8 @@ import java.time.LocalDate;
 
 import static com.pluralsight.pension.setup.AccountOpeningService.UNACCEPTABLE_RISK_PROFILE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -40,10 +42,11 @@ class AccountOpeningServiceTest {
                 DOB
         )).thenReturn(new BackgroundCheckResults("Accepted Risk", 50000));
         when(referenceIdsManager.obtainId(
-                FIRST_NAME,
-                LAST_NAME,
-                TAX_ID,
-                DOB
+                eq(FIRST_NAME),
+                anyString(),
+                eq(LAST_NAME),
+                eq(TAX_ID),
+                eq(DOB)
         )).thenReturn("VALID_ID");
         final AccountOpeningStatus accountOpeningStatus = underTest.openAccount(
                 FIRST_NAME,
