@@ -23,6 +23,7 @@ class AccountOpeningServiceTest {
     private static final String TAX_ID = "100AB";
     private static final LocalDate DOB = LocalDate.of(2000, 8, 14);
     public static final BackgroundCheckResults BACKGROUND_CHECK_RESULTS = new BackgroundCheckResults("Accepted Risk", 50000);
+    public static final String VALID_ID = "VALID_ID";
     private AccountOpeningService underTest;
     private BackgroundCheckService backgroundCheckService = mock(BackgroundCheckService.class);
     private ReferenceIdsManager referenceIdsManager = mock(ReferenceIdsManager.class);
@@ -36,19 +37,20 @@ class AccountOpeningServiceTest {
 
     @Test
     public void shouldOpenAccount() throws IOException {
+        BackgroundCheckResults accepted_checks = new BackgroundCheckResults("Accepted Risk", 50000);
         when(backgroundCheckService.confirm(
                 FIRST_NAME,
                 LAST_NAME,
                 TAX_ID,
                 DOB
-        )).thenReturn(new BackgroundCheckResults("Accepted Risk", 50000));
+        )).thenReturn(accepted_checks);
         when(referenceIdsManager.obtainId(
                 eq(FIRST_NAME),
                 anyString(),
                 eq(LAST_NAME),
                 eq(TAX_ID),
                 eq(DOB)
-        )).thenReturn("VALID_ID");
+        )).thenReturn(VALID_ID);
         final AccountOpeningStatus accountOpeningStatus = underTest.openAccount(
                 FIRST_NAME,
                 LAST_NAME,
@@ -56,6 +58,15 @@ class AccountOpeningServiceTest {
                 DOB
         );
         assertEquals(AccountOpeningStatus.OPENED, accountOpeningStatus);
+        verify(accountRepository).save(
+                VALID_ID,
+                FIRST_NAME,
+                LAST_NAME,
+                TAX_ID,
+                DOB,
+                accepted_checks
+        );
+        verify(accountOpeningEventPublisher).notify(VALID_ID);
 
     }
 
