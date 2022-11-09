@@ -16,18 +16,19 @@ import static org.mockito.Mockito.when;
 
 class AccountOpeningServiceTest {
 
-    public static final String FIRST_NAME = "Mohamed";
-    public static final String LAST_NAME = "Ahmed";
-    public static final String TAX_ID = "100AB";
-    public static final LocalDate DOB = LocalDate.of(2000, 8, 14);
+    private static final String FIRST_NAME = "Mohamed";
+    private static final String LAST_NAME = "Ahmed";
+    private static final String TAX_ID = "100AB";
+    private static final LocalDate DOB = LocalDate.of(2000, 8, 14);
     private AccountOpeningService underTest;
     private BackgroundCheckService backgroundCheckService = mock(BackgroundCheckService.class);
     private ReferenceIdsManager referenceIdsManager = mock(ReferenceIdsManager.class);
     private AccountRepository accountRepository = mock(AccountRepository.class);
+    private AccountOpeningEventPublisher accountOpeningEventPublisher = mock(AccountOpeningEventPublisher.class);
 
     @BeforeEach
     void setUp() {
-        underTest = new AccountOpeningService(backgroundCheckService,referenceIdsManager,accountRepository);
+        underTest = new AccountOpeningService(backgroundCheckService,referenceIdsManager,accountRepository, accountOpeningEventPublisher);
     }
 
     @Test
