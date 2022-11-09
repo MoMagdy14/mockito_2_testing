@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 public class AccountOpeningService {
 
-    private static final String UNACCEPTABLE_RISK_PROFILE = "HIGH";
+    protected static final String UNACCEPTABLE_RISK_PROFILE = "HIGH";
     private BackgroundCheckService backgroundCheckService;
     private ReferenceIdsManager referenceIdsManager;
     private AccountRepository accountRepository;
