@@ -39,7 +39,7 @@ public class AccountOpeningService {
             final String id = referenceIdsManager.obtainId(firstName, "",lastName,  taxId, dob);
             if (id != null) {
                 accountRepository.save(id, firstName, lastName, taxId, dob, backgroundCheckResults);
-                // accountOpeningEventPublisher.notify(id);
+                accountOpeningEventPublisher.notify(id);
                 return AccountOpeningStatus.OPENED;
             } else {
                 return AccountOpeningStatus.DECLINED;
